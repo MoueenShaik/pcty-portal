@@ -1,0 +1,149 @@
+[
+  {
+    "id": 1,
+    "name": "Moin",
+    "dependents": [
+      {
+        "name": "Rubeena",
+        "relation": "Spouse"
+      },
+      {
+        "name": "Shayaan",
+        "relation": "Son"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Subhani",
+    "dependents": [
+      {
+        "name": "Sahil",
+        "relation": "Son"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "AK",
+    "dependents": null
+  },
+  {
+    "id": 4,
+    "name": "Arifa",
+    "dependents": [
+      {
+        "name": "Aani",
+        "relation": "Spouse"
+      },
+      {
+        "name": "Aahir",
+        "relation": "Son"
+      },
+      {
+        "name": "Arshita",
+        "relation": "Daughter"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "John",
+    "dependents": [
+      {
+        "name": "Disha",
+        "relation": "Spouse"
+      },
+      {
+        "name": "Abhram",
+        "relation": "Son"
+      },
+      {
+        "name": "Ashu",
+        "relation": "Daughter"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Tim",
+    "dependents": [
+      {
+        "name": "Sherman",
+        "relation": "Spouse"
+      },
+      {
+        "name": "Anil",
+        "relation": "Son"
+      },
+      {
+        "name": "Divya",
+        "relation": "Daughter"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Asif",
+    "dependents": [
+      {
+        "name": "Arif",
+        "relation": "Spouse"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Sufiyan",
+    "dependents": [
+      {
+        "name": "Subhani",
+        "relation": "Spouse"
+      },
+      {
+        "name": "Noor",
+        "relation": "Son"
+      },
+      {
+        "name": "Salma",
+        "relation": "Daughter"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Jack",
+    "dependents": [
+      {
+        "name": "Jill",
+        "relation": "Spouse"
+      },
+      {
+        "name": "Anu",
+        "relation": "Son"
+      },
+      {
+        "name": "Ashu",
+        "relation": "Daughter"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Zoha",
+    "dependents": [
+      {
+        "name": "Zabin",
+        "relation": "Spouse"
+      },
+      {
+        "name": "Anitha",
+        "relation": "Son"
+      },
+      {
+        "name": "Asha",
+        "relation": "Daughter"
+      }
+    ]
+  }
+]
