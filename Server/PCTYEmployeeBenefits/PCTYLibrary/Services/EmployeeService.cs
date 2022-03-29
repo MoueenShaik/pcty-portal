@@ -19,9 +19,11 @@ namespace PCTYLibrary.Services
     {
         private readonly IConfiguration _configuration;
         private readonly EmployerConfigurationOptions _employerConfigurationOptions;
-        public EmployeeService(IConfiguration configuration)
+        private readonly IDiscountService _discountService;
+        public EmployeeService(IConfiguration configuration , IDiscountService discountService)
         {
             _configuration = configuration;
+            _discountService = discountService;
         }
 
         private EmployerConfigurationOptions GetEmployerConfigurationOptions()
@@ -29,38 +31,7 @@ namespace PCTYLibrary.Services
             return _configuration.GetSection("EmployerConfiguration").Get<EmployerConfigurationOptions>();
         }
 
-        private Discount GetCurrentDiscount(EmployerConfigurationOptions employerConfigurationOptions)
-        {
-            Discount discount = null;
-
-            if(!employerConfigurationOptions.IsDiscountsApplicable)
-            {
-                return discount;
-            }
-
-            discount = employerConfigurationOptions?.Discount?.FirstOrDefault(a => a.Type == employerConfigurationOptions?.DiscountType);
-            return discount;
-        }
-
-        private int GetEligibleDependendsForDiscount(Discount discount ,IList<Dependent> dependents)
-        {
-            if(discount.Type == "Name")
-            {
-              return  dependents.Where(a => a.Name.StartsWith(discount.Condition)).Count();
-            }
-
-            return 0;
-        }
-
-        private bool GetEligibleEmployeeForDiscount(Discount discount, Employee currentEmployee)
-        {
-            if (discount.Type == "Name")
-            {
-                return currentEmployee.Name.StartsWith(discount.Condition);
-            }
-
-            return false;
-        }
+    
         public async Task<EmployeeCosts> GetEmployeeBenefitsCost(int employeeId)
         {
             var employerConfigurationOptions = GetEmployerConfigurationOptions();
@@ -68,7 +39,7 @@ namespace PCTYLibrary.Services
             var employeeBenefitsCost = 0;
             var employeeBenefitsPerYear = employerConfigurationOptions.EmployeeCostOfBenefits;
             var depedentsCostPerYear = employerConfigurationOptions.DependentCostOfBenefits;
-            var discount = GetCurrentDiscount(employerConfigurationOptions);
+            var discount = _discountService.GetCurrentDiscount(employerConfigurationOptions);
             var discountPercentage = discount.DiscountPercentage;
             var allEmployees = await LoadJson();
             var currentEmployee = allEmployees.FirstOrDefault(a => a.Id == employeeId);
@@ -82,7 +53,7 @@ namespace PCTYLibrary.Services
                 if (currentEmployee.Dependents != null)
                 {
                     var dependents = currentEmployee.Dependents;
-                    var dependentEligibleForDiscount = GetEligibleDependendsForDiscount(discount, dependents);
+                    var dependentEligibleForDiscount = _discountService.GetEligibleDependendsForDiscount(discount, dependents);
                     if (dependentEligibleForDiscount > 0)
                     {
                         var percnetile = (discountPercentage / 100f);
@@ -95,7 +66,7 @@ namespace PCTYLibrary.Services
 
                 }
 
-                if (GetEligibleEmployeeForDiscount(discount,currentEmployee))
+                if (_discountService.GetEligibleEmployeeForDiscount(discount,currentEmployee))
                 {
                     employeeDiscountedAmount = employeeBenefitsPerYear - ((int)((employeeBenefitsPerYear) * (discountPercentage / 100f)));
                 }

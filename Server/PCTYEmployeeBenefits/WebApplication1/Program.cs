@@ -35,6 +35,7 @@ builder.Services.AddAuthentication(
 //});
 builder.Services.AddMvc();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IDiscountService, DiscountService>();
 
 
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
