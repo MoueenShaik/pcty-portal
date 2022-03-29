@@ -14,7 +14,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Paylocity Home
+          Paylocity Web Site
         </a>
       </header>
       <body>
