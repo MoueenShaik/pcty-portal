@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
+import { Button, ButtonGroup, Col, Container, Dropdown, DropdownButton, Row } from 'react-bootstrap';
 import { Dependent } from '../models/Dependent';
 import { Employee } from '../models/Employee';
 import { EmployeeCosts } from '../models/EmployeeCosts';
@@ -31,7 +32,7 @@ function Employer() {
 
 
 
-  async function getEmployeeBenefitsCosts() {
+   const getEmployeeBenefitsCosts = async () =>  {
     console.log(selectedOption);
     var employeeService = new EmployeeService();
     const data = await employeeService.getEmployeeBenefitsCosts(selectedOption);
@@ -41,7 +42,7 @@ function Employer() {
     return data
   }
 
-  function setDependentValues(id:number)
+  const setDependentValues = (id:number) =>
   {
     setSelectedOption(id);
     var dependents = result.find(a => a.id.toString() === id.toString())?.dependents as Dependent[];
@@ -53,30 +54,37 @@ function Employer() {
     }
     console.log(dependents);
   }
-  function handleChange(event: any) {
-    console.log(event.target.value);
-    setDependentValues(event.target.value);
-   
+
+  const handleChange = (e) => {
+    console.log(e.target.value);
+    setDependentValues(e.target.value);   
   }
+
   return (
+    
+    <Container fluid>
+  
     <div>
       <br></br>
       <br></br>
-      <label>
-        Select Employee :
-        <select value={selectedOption} onChange={handleChange}>
+     Select Employee :
+    
+     <select style={{ borderColor: "orangered" }} value={selectedOption} onChange={handleChange}>
           {result.map((option) => (
             <option value={option.id}>{option.name}</option>
           ))}
-        </select>
-      </label>
+        </select>      
+       
+     
+    
       <div>
         <br></br>
         <br></br>
         <b><u>Dependent Details</u></b>
         <br></br>
         <br></br>
-        <table style={{ width: 500 }}>
+       
+        <table >
           <thead>
             <tr>
               {headings.map(head => <th>{head}</th>)}
@@ -112,7 +120,7 @@ function Employer() {
 
       </table>
     </div>
-
+</Container>
   )
 }
 

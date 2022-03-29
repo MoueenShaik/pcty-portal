@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using PCTYLibrary;
 using PCTYLibrary.Authentication;
 using PCTYLibrary.Constants;
+using PCTYLibrary.Database;
 using PCTYLibrary.Services;
 using System.Reflection;
 
@@ -34,6 +35,8 @@ builder.Services.AddAuthentication(
 //                          });
 //});
 builder.Services.AddMvc();
+builder.Services.AddSingleton<DapperContext>();
+builder.Services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IDiscountService, DiscountService>();
 

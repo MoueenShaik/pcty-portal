@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using PCTYLibrary.Database;
 using PCTYLibrary.Models;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,12 @@ namespace PCTYLibrary.Services
         private readonly IConfiguration _configuration;
         private readonly EmployerConfigurationOptions _employerConfigurationOptions;
         private readonly IDiscountService _discountService;
-        public EmployeeService(IConfiguration configuration , IDiscountService discountService)
+        private readonly IEmployeeRepository _employeeRepository;
+        public EmployeeService(IConfiguration configuration , IDiscountService discountService , IEmployeeRepository employeeRepository)
         {
             _configuration = configuration;
             _discountService = discountService;
+            _employeeRepository = employeeRepository;
         }
 
         private EmployerConfigurationOptions GetEmployerConfigurationOptions()
@@ -31,6 +34,10 @@ namespace PCTYLibrary.Services
             return _configuration.GetSection("EmployerConfiguration").Get<EmployerConfigurationOptions>();
         }
 
+        private bool IsDataLoadFromDb()
+        {
+            return _configuration.GetSection("DataLoadFromDB").Get<bool>();
+        }
     
         public async Task<EmployeeCosts> GetEmployeeBenefitsCost(int employeeId)
         {
@@ -41,7 +48,7 @@ namespace PCTYLibrary.Services
             var depedentsCostPerYear = employerConfigurationOptions.DependentCostOfBenefits;
             var discount = _discountService.GetCurrentDiscount(employerConfigurationOptions);
             var discountPercentage = discount.DiscountPercentage;
-            var allEmployees = await LoadJson();
+            var allEmployees = await GetEmployeeList();
             var currentEmployee = allEmployees.FirstOrDefault(a => a.Id == employeeId);
 
             if (currentEmployee != null)
@@ -76,11 +83,7 @@ namespace PCTYLibrary.Services
                 }
 
                 employeeBenefitsCost = employeeDiscountedAmount + dependentCost;
-            }
-            else
-            {
-
-            }
+            }          
 
             var employeeCosts = new EmployeeCosts()
             {
@@ -94,7 +97,7 @@ namespace PCTYLibrary.Services
         }
 
 
-        public async Task<IEnumerable<Employee>> LoadJson()
+        private async Task<IEnumerable<Employee>> LoadJson()
         {
             string executableLocation = Path.GetDirectoryName(
     Assembly.GetExecutingAssembly().Location);
@@ -111,7 +114,8 @@ namespace PCTYLibrary.Services
         }
         public async Task<IEnumerable<Employee>> GetEmployeeList()
         {
-            return await LoadJson();
+            return IsDataLoadFromDb() ? await _employeeRepository.GetAllEmployee() : await LoadJson();
+           
             //return new List<Employee>()
             //{
             //    new Employee()
