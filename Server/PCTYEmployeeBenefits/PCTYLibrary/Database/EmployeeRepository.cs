@@ -11,7 +11,7 @@ namespace PCTYLibrary.Database
     public interface IEmployeeRepository
     {
 
-        public Task<IEnumerable<Employee>> GetAllEmployee();
+        public Task<IEnumerable<Employee>> GetAllEmployees();
     }
     public class EmployeeRepository : IEmployeeRepository
     {
@@ -21,13 +21,13 @@ namespace PCTYLibrary.Database
             _context = context;
         }
 
-        public async Task<IEnumerable<Employee>> GetAllEmployee()
+        public async Task<IEnumerable<Employee>> GetAllEmployees()   
         {
             var employees = new List<Employee>();
 
             var query = ConstantQueries.AllEmployees;
             using (var connection = _context.CreateConnection())
-            {
+            {   
                 
                 var companies = await connection.QueryAsync<Employee, Dependent, Employee>(
                     query, (employee, dependent) =>

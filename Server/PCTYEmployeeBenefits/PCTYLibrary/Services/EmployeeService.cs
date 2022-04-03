@@ -114,7 +114,7 @@ namespace PCTYLibrary.Services
         }
         public async Task<IEnumerable<Employee>> GetEmployeeList()
         {
-            return IsDataLoadFromDb() ? await _employeeRepository.GetAllEmployee() : await LoadJson();
+            return IsDataLoadFromDb() ? await _employeeRepository.GetAllEmployees() : await LoadJson();
            
             //return new List<Employee>()
             //{
