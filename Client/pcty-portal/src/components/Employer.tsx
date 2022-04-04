@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
-import { Button, ButtonGroup, Col, Container, Dropdown, DropdownButton, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { Dependent } from '../models/Dependent';
 import { Employee } from '../models/Employee';
 import { EmployeeCosts } from '../models/EmployeeCosts';
@@ -13,14 +13,12 @@ function Employer() {
   const [dependents, setdependents] = useState<Dependent[]>([]);
   const [employeeCosts, setemployeeCosts] = useState(new EmployeeCosts());
   const headings = ['Name', 'Relation'];
-
+  const employeeService = new EmployeeService();
 
   const request = async () => {
-    var employeeService = new EmployeeService();
     const data = await employeeService.getAllEmployees();
     setResult(data);
     console.log(result);
-    setDependentValues(1);
     return data
   };
 
@@ -30,15 +28,16 @@ function Employer() {
     request();
   }, []);
 
-
+  useEffect(() => {    
+      if (dependents.length == 0) {
+        setDependentValues(1);   
+        console.log("Set default dependent values")       
+    }    
+  }, [result]);
 
    const getEmployeeBenefitsCosts = async () =>  {
-    console.log(selectedOption);
-    var employeeService = new EmployeeService();
     const data = await employeeService.getEmployeeBenefitsCosts(selectedOption);
     setemployeeCosts(data);
-    console.log(data.salaryAfterBenefitsDeductionPerPayCheck);
-    console.log(employeeCosts?.salaryAfterBenefitsDeductionPerPayCheck);
     return data
   }
 
@@ -52,7 +51,6 @@ function Employer() {
     else {
       setdependents([])
     }
-    console.log(dependents);
   }
 
   const handleChange = (e) => {
@@ -62,7 +60,7 @@ function Employer() {
 
   return (
     
-    <Container fluid>
+    <Container style={{ paddingBottom:'20px'}} fluid>
   
     <div>
       <br></br>
@@ -73,17 +71,13 @@ function Employer() {
           {result.map((option) => (
             <option value={option.id}>{option.name}</option>
           ))}
-        </select>      
-       
-     
-    
+        </select>     
       <div>
         <br></br>
         <br></br>
         <b><u>Dependent Details</u></b>
         <br></br>
         <br></br>
-       
         <table >
           <thead>
             <tr>

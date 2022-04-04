@@ -9,7 +9,7 @@
     align-items: center;
   }
   .button {
-  background-color: orangered; /* Green */
+  background-color: orangered; 
   border: none;
   color: white;
   padding: 15px 32px;
@@ -23,6 +23,7 @@
     min-width: 15ch;
     max-width: 30ch;
     border-color: orangered;
+    color: orangered;
     border: 1px solid ;
     border-radius: 0.25em;
     padding: 0.25em 0.5em;
@@ -43,6 +44,7 @@
     margin-right: auto;
     border-left: 2px solid orangered;
     border-right: 2px solid orangered;
+    
   }
     
 
