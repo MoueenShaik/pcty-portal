@@ -19,7 +19,6 @@ namespace PCTYLibrary.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly IConfiguration _configuration;
-        private readonly EmployerConfigurationOptions _employerConfigurationOptions;
         private readonly IDiscountService _discountService;
         private readonly IEmployeeRepository _employeeRepository;
         public EmployeeService(IConfiguration configuration , IDiscountService discountService , IEmployeeRepository employeeRepository)
@@ -47,7 +46,9 @@ namespace PCTYLibrary.Services
             var employeeBenefitsPerYear = employerConfigurationOptions.EmployeeCostOfBenefits;
             var depedentsCostPerYear = employerConfigurationOptions.DependentCostOfBenefits;
             var discount = _discountService.GetCurrentDiscount(employerConfigurationOptions);
+
             var discountPercentage = discount.DiscountPercentage;
+
             var allEmployees = await GetEmployeeList();
             var currentEmployee = allEmployees.FirstOrDefault(a => a.Id == employeeId);
 
@@ -99,15 +100,22 @@ namespace PCTYLibrary.Services
 
         private async Task<IEnumerable<Employee>> LoadJson()
         {
-            string executableLocation = Path.GetDirectoryName(
-    Assembly.GetExecutingAssembly().Location);
-            string xslLocation = Path.Combine(executableLocation, "TestData.json");
-
             IEnumerable<Employee> employees = new List<Employee>();
-            using (StreamReader r = new StreamReader(xslLocation))
+
+            var currentLocation = Assembly.GetExecutingAssembly().Location;
+            if (currentLocation != null)
             {
-                string json = r.ReadToEnd();
-                employees = JsonConvert.DeserializeObject<IEnumerable<Employee>>(json);
+                string? executableLocation = Path.GetDirectoryName(currentLocation);
+                if (string.IsNullOrEmpty(executableLocation))
+                {
+                    return employees;
+                }
+
+                string xslLocation = Path.Combine(executableLocation, "TestData.json");
+
+                using StreamReader r = new StreamReader(xslLocation);
+                string? json = r.ReadToEnd();
+                employees = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Employee>>(json));
             }
 
             return employees;

@@ -28,7 +28,7 @@ namespace PCTYLibrary.Database
             var query = ConstantQueries.AllEmployees;
             using (var connection = _context.CreateConnection())
             {   
-                
+               
                 var companies = await connection.QueryAsync<Employee, Dependent, Employee>(
                     query, (employee, dependent) =>
                     {                       

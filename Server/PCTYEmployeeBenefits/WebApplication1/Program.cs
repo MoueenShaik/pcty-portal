@@ -23,17 +23,20 @@ builder.Services.AddAuthentication(
     .AddScheme<CustomAuthSchemeOptions, CustomAuthHandler>(
         AuthSchemeConstants.CustomAuthScheme, options => { });
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy(MyAllowSpecificOrigins,
-//                          builder =>
-//                          {
-//                              builder.WithOrigins("https://localhost:7046/",
-//                                "http://localhost:3000/")
-//                                                  .AllowAnyHeader()
-//                                                  .AllowAnyMethod();
-//                          });
-//});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(MyAllowSpecificOrigins,
+                          builder =>
+                          {
+                              builder.WithOrigins("https://localhost:7046/",
+                                "http://localhost:3000/")
+                                                  .AllowAnyHeader()
+                                                  .AllowAnyMethod();
+                          });
+});
+
+
+
 builder.Services.AddMvc();
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
@@ -81,8 +84,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors(MyAllowSpecificOrigins);
+
 
 
 app.UseAuthentication();

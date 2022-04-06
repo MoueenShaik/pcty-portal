@@ -38,7 +38,7 @@ namespace PCTYLibrary.Services
 
             if (!employerConfigurationOptions.IsDiscountsApplicable)
             {
-                return discount;
+                return new Discount { DiscountPercentage = 0};
             }
 
             discount = employerConfigurationOptions?.Discount?.FirstOrDefault(a => a.Type == employerConfigurationOptions?.DiscountType);

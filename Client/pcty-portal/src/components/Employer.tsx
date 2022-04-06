@@ -28,21 +28,20 @@ function Employer() {
     request();
   }, []);
 
-  useEffect(() => {    
-      if (dependents.length == 0) {
-        setDependentValues(1);   
-        console.log("Set default dependent values")       
-    }    
+  useEffect(() => {
+    if (dependents.length == 0) {
+      setDependentValues(1);
+      console.log("Set default dependent values")
+    }
   }, [result]);
 
-   const getEmployeeBenefitsCosts = async () =>  {
+  const getEmployeeBenefitsCosts = async () => {
     const data = await employeeService.getEmployeeBenefitsCosts(selectedOption);
     setemployeeCosts(data);
     return data
   }
 
-  const setDependentValues = (id:number) =>
-  {
+  const setDependentValues = (id: number) => {
     setSelectedOption(id);
     var dependents = result.find(a => a.id.toString() === id.toString())?.dependents as Dependent[];
     if (dependents != null) {
@@ -55,66 +54,66 @@ function Employer() {
 
   const handleChange = (e) => {
     console.log(e.target.value);
-    setDependentValues(e.target.value);   
+    setDependentValues(e.target.value);
   }
 
   return (
-    
-    <Container style={{ paddingBottom:'20px'}} fluid>
-  
-    <div>
-      <br></br>
-      <br></br>
-     Select Employee :
-    
-     <select style={{ borderColor: "orangered" }} value={selectedOption} onChange={handleChange}>
-          {result.map((option) => (
-            <option value={option.id}>{option.name}</option>
-          ))}
-        </select>     
+
+    <Container style={{ paddingBottom: '20px' }} fluid>
+
       <div>
         <br></br>
         <br></br>
-        <b><u>Dependent Details</u></b>
+        Select Employee :
+
+        <select style={{ borderColor: "orangered" }} value={selectedOption} onChange={handleChange}>
+          {result.map((option) => (
+            <option value={option.id}>{option.name}</option>
+          ))}
+        </select>
+        <div>
+          <br></br>
+          <br></br>
+          <b><u>Dependent Details</u></b>
+          <br></br>
+          <br></br>
+          <table >
+            <thead>
+              <tr>
+                {headings.map(head => <th>{head}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {dependents.map(row =>
+                <tr><td>{row.name}</td>
+                  <td>{row.relation}</td></tr>)}
+            </tbody>
+          </table>
+        </div>
+        <br>
+        </br>
+        <br></br>
+        <b><u>Costs</u></b>
         <br></br>
         <br></br>
-        <table >
-          <thead>
-            <tr>
-              {headings.map(head => <th>{head}</th>)}
-            </tr>
-          </thead>
-          <tbody>
-            {dependents.map(row =>
-              <tr><td>{row.name}</td>
-                <td>{row.relation}</td></tr>)}
-          </tbody>
+        <button className='button' onClick={getEmployeeBenefitsCosts}>Get Employee Benefits Cost</button>
+        <br></br>
+        <br></br>
+        <table>
+          <tr>
+            <th>SalaryPerPayCheck</th>
+            <th>TotalCostOfBenefitsPerYear</th>
+            <th>SalaryAfterBenefitsDeductionPerPayCheck</th>
+          </tr>
+          <tr>
+            <td>{employeeCosts.salaryPerPayCheck}</td>
+            <td>{employeeCosts.totalCostOfBenefitsPerYear}</td>
+            <td>{employeeCosts.salaryAfterBenefitsDeductionPerPayCheck}</td>
+          </tr>
+
         </table>
       </div>
-      <br>
-      </br>
-      <br></br>
-      <b><u>Costs</u></b>
-      <br></br>
-      <br></br>
-      <button className='button' onClick={getEmployeeBenefitsCosts}>Get Employee Benefits Cost</button>
-      <br></br>
-      <br></br>
-      <table>
-        <tr>
-          <th>SalaryPerPayCheck</th>
-          <th>TotalCostOfBenefitsPerYear</th>
-          <th>SalaryAfterBenefitsDeductionPerPayCheck</th>
-        </tr>
-        <tr>
-          <td>{employeeCosts.salaryPerPayCheck}</td>
-          <td>{employeeCosts.totalCostOfBenefitsPerYear}</td>
-          <td>{employeeCosts.salaryAfterBenefitsDeductionPerPayCheck}</td>
-        </tr>
-
-      </table>
-    </div>
-</Container>
+    </Container>
   )
 }
 
